@@ -51,9 +51,11 @@ app.post('/api/new-member', (req, res) => {
     if (error) {
       res.status(500).send();
     } else {
+		console.log(result)
       res.status(200).send({
         'message': 'success',
-        'data': result
+        'data': result,
+		'member_id': result.insertId
       })
     }
   });
@@ -107,6 +109,7 @@ app.post('/api/add-task', (req, res) => {
 
   con.query(query, values, (error, result) => {
     if (error) {
+		console.log(error)
       res.status(500).send();
     } else {
       res.status(200).send({
@@ -180,13 +183,37 @@ app.get('/api/get-tasks/weekly/:member_id', (req, res) => {
 	});
   });
 
+  /**
+ * get project tasks
+ */
+app.get('/api/get-tasks/project/:project_id', (req, res) => {
+	var project_id = req.params.project_id;
+	var query = `SELECT * from t_task JOIN t_project ON t_task.project_id = t_project.project_id 
+	WHERE t_task.project_id = ? ORDER BY t_task.created_at ASC`;
+	
+	con.query(query, [project_id],(error, result) => {
+	  if (error) {
+		console.log(error);
+		res.status(500).send();
+	  } else {
+		res.status(200).send({
+		  'message': 'success',
+		  'data': result
+		})
+	  }
+	});
+  });
+
+  /**
+   * delete a task
+   */
 app.delete('/api/delete-task/:task_id', (req, res) => {
   var task_id = req.params.task_id;
   const query = `DELETE FROM t_task WHERE task_id = ?`;
 
   con.query(query, [task_id], (error, result) => {
     if (error) {
-		console.log()
+		console.log(error)
       res.status(500).send();
     } else {
 		res.status(200).send({
