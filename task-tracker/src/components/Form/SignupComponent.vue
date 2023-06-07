@@ -1,6 +1,7 @@
 <template>
     <div id="signup-component-main">
-        <div id="form-inputs">
+        <div id="form-input-wrapper">
+            <div id="form-inputs">
             <div class="form-title">
                 Get Started
             </div>
@@ -45,6 +46,7 @@
                 <button class="primary" @click="signup">Sign Up</button>
             </div>
         </div>
+        </div>
         <div id="form-text">
             <div id="toggle-form-wrapper">
                 <div class="section-title">
@@ -57,11 +59,12 @@
                 <button class="secondary secondary-outline medium" @click="showSignup">Login</button>
             </div>
         </div>
-        
+        <ToastComponent v-model:show_toast="bShowToast" v-model:toast_message="sToastMessage" v-model:toast_type="sToastType"></ToastComponent>
     </div>
 </template>
 
 <script>
+import ToastComponent from './../ToastComponent.vue';
 import { mapMutations, mapActions } from 'vuex';
 export default {
     data() {
@@ -72,8 +75,14 @@ export default {
             sUsername: '',
             sPassword: '',
             sRePassword: '',
-            sErrorMessage: ''
+            sErrorMessage: '',
+            bShowToast: false,
+            sToastMessage: '',
+            sToastType: 'success_toast'
         }
+    },
+    components: {
+        ToastComponent
     },
     methods: {
         ...mapMutations('store', ['setShowSignup', 'setShowLogin', 'setHasUser', 'toggleLoader']),
@@ -88,7 +97,6 @@ export default {
             let sUsername = this.sUsername;
             this.sUsername = sUsername.toLowerCase();
             this.bHasError = false
-            console.log(this.sUsername)
         },
 
         signup() {
@@ -98,6 +106,7 @@ export default {
                 return false;
             }
 
+            this.toggleLoader(true);
             var oFormInput = {
                 first_name: this.sFirstName,
                 last_name: this.sLastName,
@@ -106,19 +115,23 @@ export default {
             }
 
             this.insertMember(oFormInput).then((response) => {
-                console.log(response)
                 if(response.data.message !== 'success') {
                     return false;
                 }
 
                 localStorage.setItem('time_tracker_user', this.sFirstName);
-                this.setHasUser(true);
-                this.setShowSignup(false);
-                this.setShowLogin(false);
+                let oThis = this;
+                this.sToastMessage = 'Sign up successful! Happy tracking!';
+                this.sToastType = 'success_toast';
+                this.bShowToast = true;
+                setTimeout(function() {
+                    oThis.setHasUser(true);
+                    oThis.setShowSignup(false);
+                    oThis.setShowLogin(false);
+                    oThis.toggleLoader(false);
+                }, 2000);
             }).catch((error) => {
                 console.log(error)
-            }).then(() => {
-                this.toggleLoader(false);
             })
         },
 
@@ -161,9 +174,9 @@ export default {
 
                 this.bHasError = true;
                 this.sErrorMessage = 'Username already exists. Choose another one.';
+                this.toggleLoader(false);
             }).catch((error) => {
                 console.error(error)
-            }).then(() => {
                 this.toggleLoader(false);
             })
 
@@ -226,7 +239,6 @@ export default {
 
 #error-message-wrap {
     background-color: var(--light-red);
-    width: 100%;
     height: 50px;
     color: var(--dark-red);
     display: flex;

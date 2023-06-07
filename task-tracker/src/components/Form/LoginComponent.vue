@@ -12,37 +12,41 @@
                 <button class="secondary secondary-outline medium" @click="showSignup">SIGN UP</button>
             </div>
         </div>
-        <div id="form-inputs">
-            <div class="form-title">
-                Great to see you again!
-            </div>
-            <br><br>
-            <Transition name="bounce">
-                <div id="error-message-wrap" v-if="bHasError">
-                    {{ sErrorMessage }}
+        <div id="form-input-wrapper">
+            <div id="form-inputs">
+                <div class="form-title">
+                    Great to see you again!
                 </div>
-            </Transition>
-            <div class="form-inputs">
-                <div id="form-row-1" class="form-row">
-                    <div class="input-label">Username</div>
-                    <input type="text" id="form-login-username" v-model="sUsername" @input="bHasError = false">
+                <br><br>
+                <Transition name="bounce">
+                    <div id="error-message-wrap" v-if="bHasError">
+                        {{ sErrorMessage }}
+                    </div>
+                </Transition>
+                <div class="form-inputs">
+                    <div id="form-row-1" class="form-row">
+                        <div class="input-label">Username</div>
+                        <input type="text" id="form-login-username" v-model="sUsername" @input="bHasError = false">
+                    </div>
                 </div>
-            </div>
-            <div class="form-inputs">
-                <div id="form-row-2" class="form-row">
-                    <div class="input-label">Password</div>
-                    <input type="password" id="form-login-password" class="input-pass" v-model="sPassword" @input="bHasError = false">
+                <div class="form-inputs">
+                    <div id="form-row-2" class="form-row">
+                        <div class="input-label">Password</div>
+                        <input type="password" id="form-login-password" class="input-pass" v-model="sPassword" @input="bHasError = false">
+                    </div>
                 </div>
-            </div>
-            <div class="form-inputs">
-                <button class="primary" @click="login">Log In</button>
+                <div class="form-inputs">
+                    <button class="primary" @click="login">Log In</button>
+                </div>
             </div>
         </div>
+    <ToastComponent v-model:show_toast="bShowToast" v-model:toast_message="sToastMessage" v-model:toast_type="sToastType"></ToastComponent>
     </div>
 </template>
 
 <script>
 import { mapMutations, mapActions } from 'vuex';
+import ToastComponent from './../ToastComponent.vue'
 export default {
     data() {
         return {
@@ -50,7 +54,14 @@ export default {
             bHasError: false,
             sUsername: '',
             sPassword: '',
+            bShowToast: false,
+            sToastMessage: '',
+            sToastType: 'success_toast'
         }
+    },
+
+    components: {
+        ToastComponent
     },
     methods: {
         ...mapMutations('store', ['setShowSignup', 'setShowLogin', 'setHasUser', 'toggleLoader']),
@@ -79,15 +90,22 @@ export default {
                 if(response.data.message !== 'success' || response.data.data.length <= 0){
                     this.bHasError = true;
                     this.sErrorMessage = 'Username and password did not match.'
+                    this.toggleLoader(false);
                     return false;
                 }
-
                 
                 localStorage.setItem('time_tracker_user', this.sUsername);
-                this.setHasUser(true);
-                this.setShowSignup(false);
-                this.setShowLogin(false);
-                this.toggleLoader(false);
+                this.sToastMessage = 'Login successful!';
+                this.bShowToast = true;
+                this.sToastType = 'success_toast'
+                let oThis = this;
+
+                setTimeout(function() {
+                    oThis.setHasUser(true);
+                    oThis.setShowSignup(false);
+                    oThis.setShowLogin(false);
+                    oThis.toggleLoader(false);
+                }, 1500)
             })
         },
     }
@@ -117,7 +135,7 @@ export default {
     flex-direction: column;
     justify-content: center;
     width: 500px;
-    padding: 0 211px;
+    padding: 0 50px;
     gap: 20px;
 }
 
@@ -138,5 +156,10 @@ export default {
     width: 100%;
 }
 
+#form-input-wrapper {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
 
 </style>

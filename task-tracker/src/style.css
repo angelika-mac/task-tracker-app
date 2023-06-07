@@ -354,7 +354,7 @@ input[type=checkbox] {
 }
 
 .slide-fade-leave-active {
-  transition: all 0.3s cubic-bezier(0.5, 0.3, 0.3, 1);
+  transition: all 0.8s cubic-bezier(0.5, 0.3, 0.5 1);
 }
 
 .slide-fade-enter-from,
