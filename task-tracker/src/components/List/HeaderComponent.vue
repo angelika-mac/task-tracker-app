@@ -3,17 +3,20 @@
         <div class="list-header">
             <div class="list-title">
                 <span>
-                    <img width="50" height="50" :src=header_icon />            
+                    <img width="50" height="50" :src=oHeader.src />            
                 </span>
-                <p>{{ header_title }}</p>
+                <p>{{ oHeader.title }}</p>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+import { mapState } from 'vuex';
 export default {
-    props: ['header_title', 'header_icon']
+    computed: {
+        ...mapState('store', ['oHeader'])
+    }
 }
 </script>
 

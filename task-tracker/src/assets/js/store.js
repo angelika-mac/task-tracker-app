@@ -10,6 +10,13 @@ const store = new Vuex.Store({
     store: {
       namespaced: true,
       state: {
+        
+        oColors: {
+          blue: '22BDDE',
+          orange: 'F5A353',
+          red: 'E86264',
+          green: '38AF91'
+        },
         bShowLogin: true,
         bShowSignup: false,
         bHasUser: false,
@@ -19,7 +26,13 @@ const store = new Vuex.Store({
         aDailyTasks: [],
         aWeeklyTasks: [],
         aTaskByProjects: [],
-        oTaskToEdit: undefined
+        oTaskToEdit: undefined,
+        aDataSource: undefined,
+        oHeader: {
+          'title': 'Dashboard',
+          'src': 'https://img.icons8.com/sf-regular/50/14a4ad/dashboard.png'
+        },
+        sTab: 'dashboard',
       },
       mutations: {
         setShowLogin(state, bShow){
@@ -51,6 +64,27 @@ const store = new Vuex.Store({
         },
         setTaskToEdit(state, oData){
           state.oTaskToEdit = oData
+        },
+        setDataSource(state, aData) {
+          state.aDataSource = aData;
+        },
+        setHeader(state, oData) {
+          state.oHeader = oData
+        },
+        setTab(state, sTab) {
+          state.sTab = sTab;
+        },
+        resetDashboard(state){
+          state.oHeader = {
+            'title': 'Dashboard',
+            'src': 'https://img.icons8.com/sf-regular/50/14a4ad/dashboard.png'
+          },
+          state.bHasUser = false;
+          state.bShowSignup = false;
+          state.bShowLogin = true;
+          state.aDataSource = undefined;
+          state.sTab = 'dashboard';
+          state.bShowLoader = false;
         }
       },
 
@@ -89,8 +123,10 @@ const store = new Vuex.Store({
           return new Promise((resolve, reject) => {
             api.get('/api/get-projects').then((response) => {
               resolve(response);
-              commit('setProjects', response.data.data)
+              commit('setProjects', response.data.data);
+              commit('toggleLoader', false);
             }).catch((error) => {
+              commit('toggleLoader', false);
               reject(error);
             })
           })
@@ -99,8 +135,10 @@ const store = new Vuex.Store({
         addTask({commit}, oData) {
           return new Promise((resolve, reject) => {
             api.post('/api/add-task', oData).then((response) => {
+              commit('toggleLoader', false);
               resolve(response);
             }).catch((error) =>{
+              commit('toggleLoader', false);
               reject(error);
             })
           })
@@ -109,21 +147,11 @@ const store = new Vuex.Store({
         editTask({commit}, oData) {
           return new Promise((resolve, reject) => {
             api.put('/api/update-task', oData).then((response) => {
+              commit('toggleLoader', false);
               resolve(response);
             }).catch((error) =>{
+              commit('toggleLoader', false);
               reject(error);
-            })
-          })
-        },
-
-        getDailyTasks({commit}, iMemberId) {
-          return new Promise((resolve, reject) => {
-            api.get(`/api/get-tasks/daily/${iMemberId}`).then((response) => {
-              commit('setDailyTasks', response.data.data);
-              resolve(response)
-            })
-            .catch((error)=> {
-              reject(error)
             })
           })
         },
@@ -132,9 +160,29 @@ const store = new Vuex.Store({
           return new Promise((resolve, reject) => {
             api.get(`/api/get-tasks/weekly/${iMemberId}`).then((response) => {
               commit('setWeeklyTasks', response.data.data);
+              commit('setDataSource', response.data.data);
+              commit('toggleLoader', false);
+              commit('setHeader', { 'title': 'Dashboard', 'src': 'https://img.icons8.com/sf-regular/50/14a4ad/dashboard.png'});
+              commit('setTab', 'dashboard');
               resolve(response)
             })
             .catch((error)=> {
+              reject(error)
+            })
+          })
+        },
+
+        getProjectTasks({commit, state}, iProjectId) {
+          return new Promise((resolve, reject) => {
+            api.get(`/api/get-tasks/project/${iProjectId}`).then((response) => {
+              commit('setDataSource', response.data.data);
+              commit('toggleLoader', false);
+              commit('setTab', 'proj' + iProjectId);
+              commit('setHeader', { 'title': state.oHeader.title, 'src': state.oHeader.src});
+              resolve(response)
+            })
+            .catch((error)=> {
+              commit('toggleLoader', false);
               reject(error)
             })
           })

@@ -43,7 +43,7 @@
             </div>
             <br>
             <div class="form-inputs">
-                <button class="primary" @click="signup">Sign Up</button>
+                <button class="primary" @click="validateForm">Sign Up</button>
             </div>
         </div>
         </div>
@@ -100,13 +100,6 @@ export default {
         },
 
         signup() {
-            this.validateForm(oFormInput);
-
-            if(this.bHasError === true) {
-                return false;
-            }
-
-            this.toggleLoader(true);
             var oFormInput = {
                 first_name: this.sFirstName,
                 last_name: this.sLastName,
@@ -119,6 +112,7 @@ export default {
                     return false;
                 }
 
+                oFormInput.member_id = response.data.member_id
                 localStorage.setItem('time_tracker_user', this.sFirstName);
                 let oThis = this;
                 this.sToastMessage = 'Sign up successful! Happy tracking!';
@@ -134,7 +128,9 @@ export default {
                     oThis.toggleLoader(false);
                 }, 2000);
             }).catch((error) => {
-                console.log(error)
+                this.sToastMessage = 'Something went wrong';
+                this.sToastType = 'error_toast';
+                this.bShowToast = true;
             })
         },
 
@@ -172,6 +168,7 @@ export default {
                 username: this.sUsername
             }).then((response) => {
                 if(response.data.length <= 0) {
+                    this.signup()
                     return false;
                 }
 
@@ -179,8 +176,9 @@ export default {
                 this.sErrorMessage = 'Username already exists. Choose another one.';
                 this.toggleLoader(false);
             }).catch((error) => {
-                console.error(error)
-                this.toggleLoader(false);
+                this.sToastMessage = 'Something went wrong';
+                this.sToastType = 'error_toast';
+                this.bShowToast = true;
             })
 
         }

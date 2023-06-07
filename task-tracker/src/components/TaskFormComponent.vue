@@ -92,11 +92,11 @@ export default {
     },
     props: ['form_type', 'show_task_modal'],
     computed: {
-        ...mapState('store', ['aProjects', 'oUserData', 'oTaskToEdit'])
+        ...mapState('store', ['aProjects', 'oUserData', 'oTaskToEdit', 'sTab'])
     },
     methods: {
         ...mapMutations('store', ['toggleLoader', 'setTaskToEdit']),
-        ...mapActions('store', ['addTask', 'editTask', 'getWeeklyTasks']),
+        ...mapActions('store', ['addTask', 'editTask', 'getWeeklyTasks', 'getProjectTasks']),
         closeModal() {
             this.$emit('update:show_task_modal', false);
             this.setTaskToEdit(undefined);
@@ -188,9 +188,11 @@ export default {
 
         upsertCallback() {
             this.toggleLoader(true);
-            this.getWeeklyTasks(this.oUserData.member_id).then(() => {
-                this.toggleLoader(false);
-            })
+            if(this.sTab === 'dashboard' || this.form_type === 'add') {
+                this.getWeeklyTasks(this.oUserData.member_id);
+            } else {
+                this.getProjectTasks(this.sTab.replace('proj', ''));
+            }
         },
 
         validateInput() {
