@@ -146,7 +146,7 @@ Setup the pre-requisites before trying out the app
 <!-- CONTACT -->
 ## Contact
 
-LinkedIn: [LinkedIn](https://www.linkedin.com/in/angelika-macapagal/)
+LinkedIn: [https://www.linkedin.com/in/angelika-macapagal/](https://www.linkedin.com/in/angelika-macapagal/)
 
 Project Link: [https://github.com/fuhlicity/task-tracker-app](https://github.com/fuhlicity/task-tracker-app)
 
