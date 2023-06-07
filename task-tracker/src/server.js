@@ -79,56 +79,120 @@ app.post('/api/get-member', (req, res) => {
   });
 });
 
-app.get('/api/all', (req, res) => {
-  var query = `SELECT * from ${TABLE_NAME}`;
+/**
+ * Get projects
+ */
+app.get('/api/get-projects', (req, res) => {
+  var query = `SELECT * from t_project`;
   con.query(query, (error, result) => {
     if (error) {
       res.status(500).send();
     } else {
-      res.status(200).send(result)
+      res.status(200).send({
+        'message': 'success',
+        'data': result
+      })
     }
   });
 });
 
-app.post('/api/insert', (req, res) => {
-  const { name, age, email } = req.body;
-  const query = `INSERT INTO ${TABLE_NAME} (name, age, email) VALUES (?, ?, ?)`;
-  const values = [name, age, email];
+
+/**
+ * insert a task
+ */
+app.post('/api/add-task', (req, res) => {
+  const { member_id, project_id, log_datetime, hours, task_name, task_description } = req.body;
+  const query = `INSERT INTO t_task (member_id, project_id, log_datetime, hours, task_name, task_description) VALUES (?, ?, ?, ?, ?, ?)`;
+  const values = [member_id, project_id, log_datetime, hours, task_name, task_description];
 
   con.query(query, values, (error, result) => {
     if (error) {
       res.status(500).send();
     } else {
-      res.status(200).send({result})
+      res.status(200).send({
+        'message': 'success',
+        'data': result
+      })
     }
   });
 });
 
-app.put('/api/update', (req, res) => {
-  const { user_id, name, age, email } = req.body;
-  const query = `UPDATE ${TABLE_NAME} SET name = ?, age = ?, email = ? WHERE user_id = ?;`;
-  const values = [name, age, email, user_id];
+/**
+ * update a task
+ */
+app.put('/api/update-task', (req, res) => {
+  const {project_id, log_datetime, hours, task_name, task_description, task_id} = req.body;
+  const query = `UPDATE t_task SET project_id = ?, log_datetime = ?, hours = ?, task_name = ?, task_description = ? WHERE task_id = ?`;
+  const values = [project_id, log_datetime, hours, task_name, task_description, task_id];
 
   con.query(query, values, (error, result) => {
     if (error) {
       res.status(500).send();
     } else {
-      res.status(200).send(result)
+		console.log(result)
+      res.status(200).send({
+        'message': 'success',
+        'data': result
+      })
     }
   });
 });
 
-app.delete('/api/delete/:user_ids', (req, res) => {
-  var user_id = req.params.user_ids;
-  var user_id_array = user_id.split(',');
-
-  const query = `DELETE FROM ${TABLE_NAME} WHERE user_id IN (?)`;
-
-  con.query(query, [user_id_array], (error, result) => {
+/**
+ * get daily tasks
+ */
+app.get('/api/get-tasks/daily/:member_id', (req, res) => {
+  var member_id = req.params.member_id;
+  var query = `SELECT * from t_task JOIN t_project ON t_task.project_id = t_project.project_id 
+  WHERE member_id = ? AND DATE(t_task.log_datetime) = CURDATE() ORDER BY t_task.created_at ASC;`;
+  var value = [member_id];
+  con.query(query, value,(error, result) => {
     if (error) {
+      console.log(error);
       res.status(500).send();
     } else {
-      res.status(200).send(result)
+      res.status(200).send({
+        'message': 'success',
+        'data': result
+      })
+    }
+  });
+});
+
+/**
+ * get weekly tasks
+ */
+app.get('/api/get-tasks/weekly/:member_id', (req, res) => {
+	var member_id = req.params.member_id;
+	var query = `SELECT * from t_task JOIN t_project ON t_task.project_id = t_project.project_id 
+	WHERE member_id = ? AND YEAR(t_task.log_datetime) = YEAR(CURDATE()) AND WEEK(t_task.log_datetime) = WEEK(CURDATE()) ORDER BY t_task.created_at ASC`;
+	
+	con.query(query, [member_id],(error, result) => {
+	  if (error) {
+		console.log(error);
+		res.status(500).send();
+	  } else {
+		res.status(200).send({
+		  'message': 'success',
+		  'data': result
+		})
+	  }
+	});
+  });
+
+app.delete('/api/delete-task/:task_id', (req, res) => {
+  var task_id = req.params.task_id;
+  const query = `DELETE FROM t_task WHERE task_id = ?`;
+
+  con.query(query, [task_id], (error, result) => {
+    if (error) {
+		console.log()
+      res.status(500).send();
+    } else {
+		res.status(200).send({
+			'message': 'success',
+			'data': result
+		})
     }
   });
 });

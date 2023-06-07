@@ -17,5 +17,7 @@ export default {
 </script>
 
 <style>
-
+#loader-wrapper {
+    z-index: 99999;
+}
 </style>

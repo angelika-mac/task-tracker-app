@@ -2,7 +2,7 @@
 import FormComponent from "./components/FormComponent.vue";
 import NavigationComponent from "./components/NavigationComponent.vue";
 import LoaderComponent from "./components/LoaderComponent.vue";
-import { mapState, mapMutations } from 'vuex';
+import { mapState } from 'vuex';
 export default {
     data() {
         return {

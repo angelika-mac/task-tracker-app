@@ -38,7 +38,7 @@
                 <div id="form-row-4" class="form-row">
                     <div class="input-label">Re-enter Password</div>
                     <input type="password" id="form-login-repassword" class="input-repass" v-model="sRePassword" 
-                    ref="repasswordField" @input="bHasError = false">
+                    ref="repasswordField" @input="bHasError = false" @keyup.enter="signup">
                 </div>
             </div>
             <br>
@@ -85,7 +85,7 @@ export default {
         ToastComponent
     },
     methods: {
-        ...mapMutations('store', ['setShowSignup', 'setShowLogin', 'setHasUser', 'toggleLoader']),
+        ...mapMutations('store', ['setShowSignup', 'setShowLogin', 'setHasUser', 'toggleLoader', 'setUserData']),
         ...mapActions('store', ['insertMember', 'checkUsername']),
 
         showSignup() {
@@ -128,6 +128,9 @@ export default {
                     oThis.setHasUser(true);
                     oThis.setShowSignup(false);
                     oThis.setShowLogin(false);
+                    
+                    delete oFormInput['password'];
+                    oThis.setUserData(oFormInput);
                     oThis.toggleLoader(false);
                 }, 2000);
             }).catch((error) => {
