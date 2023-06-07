@@ -32,7 +32,8 @@
                 <div class="form-inputs">
                     <div id="form-row-2" class="form-row">
                         <div class="input-label">Password</div>
-                        <input type="password" id="form-login-password" class="input-pass" v-model="sPassword" @input="bHasError = false">
+                        <input type="password" id="form-login-password" class="input-pass" v-model="sPassword" 
+                        @input="bHasError = false" @keyup.enter="login">
                     </div>
                 </div>
                 <div class="form-inputs">
@@ -64,7 +65,7 @@ export default {
         ToastComponent
     },
     methods: {
-        ...mapMutations('store', ['setShowSignup', 'setShowLogin', 'setHasUser', 'toggleLoader']),
+        ...mapMutations('store', ['setShowSignup', 'setShowLogin', 'setHasUser', 'toggleLoader', 'setUserData']),
         ...mapActions('store', ['getMember']),
 
         showSignup() {
@@ -87,10 +88,10 @@ export default {
             }
 
             this.getMember(oFormData).then((response) => {
+                this.toggleLoader(false);
                 if(response.data.message !== 'success' || response.data.data.length <= 0){
                     this.bHasError = true;
                     this.sErrorMessage = 'Username and password did not match.'
-                    this.toggleLoader(false);
                     return false;
                 }
                 
@@ -98,13 +99,16 @@ export default {
                 this.sToastMessage = 'Login successful!';
                 this.bShowToast = true;
                 this.sToastType = 'success_toast'
-                let oThis = this;
+
+                var oUserData = response.data.data[0];
+                delete oUserData['password'];
+                this.setUserData(oUserData);
+                var oThis = this;
 
                 setTimeout(function() {
                     oThis.setHasUser(true);
                     oThis.setShowSignup(false);
                     oThis.setShowLogin(false);
-                    oThis.toggleLoader(false);
                 }, 1500)
             })
         },

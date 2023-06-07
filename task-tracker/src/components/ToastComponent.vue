@@ -1,15 +1,17 @@
 <template>
   <div id="toast-component-main">
-    <div id="toast-wrapper" :class="toast_type" v-if="show_toast">
-        <div id="toast-content">
-            <div id="toast-text">
-                {{ toast_message }}
+    <Transition name="slide-fade">
+        <div id="toast-wrapper" :class="toast_type" v-if="show_toast">
+            <div id="toast-content">
+                <div id="toast-text">
+                    {{ toast_message }}
+                </div>
+                <a href="#" @click.prevent="closeToast()">
+                    <img width="20" height="20" src="https://img.icons8.com/sf-regular/20/14a4ad/multiply.png" alt="multiply"/>
+                </a>
             </div>
-            <a href="#" @click.prevent="closeToast()">
-                <img width="20" height="20" src="https://img.icons8.com/sf-regular/20/14a4ad/multiply.png" alt="multiply"/>
-            </a>
         </div>
-    </div>
+    </Transition>
   </div>
 </template>
 
@@ -19,6 +21,17 @@ export default {
     methods: {
         closeToast() {
             this.$emit('update:show_toast', false)
+        }
+    },
+
+    watch: {
+        show_toast(newval) {
+            if(newval === true) {
+                let oThis = this;
+                setTimeout(function() {
+                    oThis.$emit('update:show_toast', false);
+                }, 1500)
+            }
         }
     }
 }
@@ -45,6 +58,7 @@ export default {
     align-items: center;
     justify-content: space-between;
     font-size: 18px;
+    z-index: 999999;
 }
 
 .success_toast {
