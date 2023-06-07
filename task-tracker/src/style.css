@@ -1,0 +1,382 @@
+
+:root {
+  --teal: #14a4ad;
+  --red: #E94B5E;
+  --gray: #343C50;
+  --light-grey: #f7f7f7;
+  --lighter-grey: #EAEAEC;
+  --dark-grey: #848B93;
+  --green: #38AF91;
+  --orange: #F5A353;
+  --blue: #22BDDE;
+  --red: #E86264;
+  --light-green: #e7f6f1;
+  --light-orange: #fff4ed;
+  --light-blue: #e6f8fb;
+  --light-red: #fdedee;
+  --dark-blue: #56bfd6;
+  --dark-orange: #f6a659;
+  --dark-green: #4aa690;
+  --dark-red: #e05f61;
+}
+
+body {
+  margin:0;
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--lighter-grey);
+  overflow-x: hidden;
+}
+
+
+button {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  padding: 12px 50px;
+  text-transform: uppercase;
+  border-radius: 30px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+button.primary {
+  background-color: var(--teal);
+  color: var(--lighter-grey);
+  font-size: 18px;
+}
+
+button.primary:hover {
+  background-color: var(--light-grey);
+  border: 2px solid var(--teal);
+  color: var(--teal);
+}
+
+button.primary.primary-outline {
+  border:2px solid var(--teal);
+  color: var(--teal);
+  background-color: var(--lighter-grey);
+  font-size: 18px;
+}
+
+button.primary.primary-outline:hover {
+  color: var(--lighter-grey);
+  background-color: var(--teal);
+}
+
+button.secondary {
+  background-color: var(--lighter-grey);
+  color: var(--teal);
+  font-size: 18px;
+}
+
+button.secondary.secondary-outline {
+  border: 2px solid var(--lighter-grey);
+  color: var(--lighter-grey);
+  background-color: var(--teal);
+}
+
+button.secondary.secondary-outline:hover {
+  color: var(--teal);
+  border: 2px solid var(--teal);
+  background-color: var(--lighter-grey);
+}
+
+button.medium {
+  font-size: 14px;
+}
+
+.section-title{
+  font-weight: 800;
+  font-size: 24px;
+  color: var(--light-grey);
+}
+
+.section-text {
+  font-size: 14px;
+  color: var(--light-grey);
+}
+
+
+input, textarea {
+  padding: 10px;
+  font-size: 14px;
+  color: var(--dark-grey);
+  font-family: 'Poppins', sans-serif;
+  border: 0;
+  outline: none;
+}
+
+textarea {
+  resize: none;
+}
+
+.add-input {
+  border: 1px solid var(--lighter-grey);
+  border-radius: 2px;
+}
+
+input[type='text'].add-input:focus {
+  outline: 1px solid var(--dark-grey);
+}
+
+input[type='text']:focus, input[type='password'].add-input:focus {
+  outline: 2px solid var(--teal);
+}
+
+.proj {
+  border-radius: 30px;
+  width: 150px;
+  padding: 10px; 
+  text-align: center;
+  font-weight: 500;
+  cursor: pointer;
+  text-overflow: ellipsis; 
+  overflow: hidden; 
+  white-space: nowrap;
+  font-size: 14px;
+  margin-right: 20px;
+}
+
+.proj.proj-blue {
+  background-color: var(--light-blue);
+  color: var(--dark-blue);
+}
+
+.proj.proj-orange {
+  background-color: var(--light-orange);
+  color: var(--dark-orange);
+}
+
+.proj.proj-green {
+  background-color: var(--light-green);
+  color: var(--dark-green);
+}
+
+.proj.proj-red {
+  background-color: var(--light-red);
+  color: var(--dark-red);
+}
+
+.list {
+  border-radius: 30px;
+  width: 200px; 
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  background-color: var(--lighter-grey);
+  color: var(--dark-grey);
+  padding: 0 30px;
+  cursor: pointer;
+}
+
+.list:hover, .list.selected {
+  background-color: var(--light-grey);
+}
+
+.list > span {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+}
+
+.add-task {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  background-color: var(--teal);
+  font-size: 20px;
+  border-radius: 40px;
+  padding: 0 20px;
+  color: var(--light-grey);
+  cursor: pointer;
+  margin-bottom: 30px;
+}
+
+.add-task:hover{
+  background-color: #3AB9C2;
+}
+
+.add-task > img {
+  margin-right: 20px;
+}
+
+.task-title {
+  font-weight: 600;
+  font-size: 20px;
+  color: var(--gray);
+  text-overflow: ellipsis; 
+  overflow: hidden; 
+  white-space: nowrap;
+}
+
+.task-desc {
+  font-size: 14px;
+  color: var(--dark-grey);
+  text-overflow: ellipsis; 
+  overflow: hidden; 
+  white-space: nowrap;
+}
+
+.delete-task {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  background-color: #fff;
+  font-size: 18px;
+  border-radius: 40px;
+  padding: 0 30px;
+  color: var(--red);
+  cursor: pointer;
+}
+
+.delete-task:hover{
+  background-color: var(--lighter-grey);
+}
+
+.delete-task > svg{
+  margin-right: 20px;
+}
+
+.list-title {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 20px 50px;
+  font-size: 38px;
+  color: var(--gray);
+  gap: 10px;
+  height: 100px;
+  font-weight: 600;
+}
+
+.list-title > span {
+  width: 50px;
+  height: 50px;
+}
+
+.list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.list-content {
+  padding: 0 50px;
+}
+
+.list-task {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+input[type=checkbox] {
+  width: 20px;
+  height: 20px;
+}
+
+.list-section-title {
+  color: var(--dark-grey);
+  border-bottom: 2px solid var(--lighter-grey);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.list-section-title > span {
+  display: flex;
+  align-items: center;
+}
+
+.task-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  justify-content: flex-start;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.check-col {
+  margin-right: 20px;
+}
+
+.task-col {
+  width: 650px;
+  text-overflow: ellipsis; 
+  overflow: hidden; 
+  white-space: nowrap;
+  margin-right: 20px;
+}
+
+.hours-col {
+  margin-right: 20px;
+}
+
+.empty-placeholder {
+  margin: 0 auto;
+  padding: 20px;
+  font-size: 18px;
+  color: var(--dark-grey);
+}
+
+.del-col {
+  cursor: pointer;
+}
+
+.black-overlay {
+  position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-title {
+  color: var(--teal);
+  font-size: 38px;
+  font-weight: 600;
+}
+
+/*
+  Enter and leave animations can use different
+  durations and timing functions.
+*/
+.slide-fade-enter-active {
+  transition: all 0.3s ease-out;
+}
+
+.slide-fade-leave-active {
+  transition: all 0.8s cubic-bezier(0.5, 0.3, 0.5 1);
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  transform: translateX(20px);
+  opacity: 0;
+}
+
+.bounce-enter-active {
+  animation: bounce-in 0.5s;
+}
+.bounce-leave-active {
+  animation: bounce-in 0.5s reverse;
+}
+@keyframes bounce-in {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.25);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
