@@ -14,7 +14,7 @@
                 <img src="https://img.icons8.com/hatch/30/FFFFFF/add.png" alt="add"/>
                 <p>Add New Task</p>
             </div>
-            <div class="list" :class="{ selected: sTab === 'dashboard' }" @click="getData('all')">
+            <div class="list" :class="{ selected: sTab === 'dashboard' }" @click="getData('all', 'dashboard')">
                 <span>
                     <img src="https://img.icons8.com/sf-regular/30/14a4ad/dashboard.png" alt="dashboard"/>
                 </span>
@@ -78,12 +78,13 @@ export default {
             if(sTab === this.sTab) {
                 return false;
             }
+            
+            this.toggleLoader(true)
             this.setTab(sTab)
             var oHeader = {
                 'title': 'Dashboard',
                 'src': 'https://img.icons8.com/sf-regular/50/14a4ad/dashboard.png'
             };
-            this.toggleLoader(true)
             if(mType=== 'all') {
                 this.getWeeklyTasks(this.oUserData.member_id)
             } else {

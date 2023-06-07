@@ -147,8 +147,7 @@ export default {
                 if(response.data.message !== 'success') {
                     return false;
                 }
-
-                this.toggleLoader(false);
+                
                 this.bShowToast = true;
                 this.sToastText = 'New task added!'
                 this.sToastType = 'success_toast';

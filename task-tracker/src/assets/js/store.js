@@ -45,7 +45,14 @@ const store = new Vuex.Store({
           state.bHasUser = bHasUser;
         },
         toggleLoader(state, bShow) {
-          state.bShowLoader = bShow;
+          if(bShow === true) {
+            state.bShowLoader = true;
+            return false;
+          }
+          
+          setTimeout(function() {
+            state.bShowLoader = false;
+          }, 1500);
         },
         setUserData(state, oData) {
           state.oUserData = oData
