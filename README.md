@@ -148,7 +148,7 @@ Setup the pre-requisites before trying out the app
 
 LinkedIn: [https://www.linkedin.com/in/angelika-macapagal/](https://www.linkedin.com/in/angelika-macapagal/)
 
-Project Link: [https://github.com/fuhlicity/task-tracker-app](https://github.com/fuhlicity/task-tracker-app)
+Project Link: [https://github.com/fuhlicity/task-tracker-app](https://github.com/angelika-mac/task-tracker-app)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
